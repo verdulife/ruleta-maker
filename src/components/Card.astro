@@ -1,0 +1,55 @@
+---
+import { jsPDF, type jsPDFOptions } from "jspdf";
+
+const docSize = 920;
+const docOptions: jsPDFOptions = {
+  orientation: "landscape",
+  unit: "mm",
+  format: [docSize, docSize],
+};
+const doc = new jsPDF(docOptions);
+doc.setProperties({
+  title: "Ruleta de 36 porciones",
+  author: "Ruleta Vertical SL",
+  creator: "Ruleta Vertical SL",
+});
+
+const clip_size = docSize;
+const clip_radius = clip_size / 2;
+const clip_x = clip_radius + (docSize - clip_size) / 2;
+const clip_y = clip_radius + (docSize - clip_size) / 2;
+doc.setFillColor("#eee");
+doc.circle(clip_x, clip_y, clip_radius, "F");
+doc.clip();
+
+const print_size = 900;
+const print_radius = print_size / 2;
+const print_x = print_radius + (docSize - print_size) / 2;
+const print_y = print_radius + (docSize - print_size) / 2;
+doc.setDrawColor("red");
+doc.circle(print_x, print_y, print_radius);
+
+const secure_size = 890;
+const secure_radius = secure_size / 2;
+const secure_x = secure_radius + (docSize - secure_size) / 2;
+const secure_y = secure_radius + (docSize - secure_size) / 2;
+doc.setDrawColor("cyan");
+doc.circle(secure_x, secure_y, secure_radius);
+
+const holes_amount = 36;
+const holes_size = 3;
+const holes_radius = holes_size / 2;
+const holes_padding = 30;
+const hole_deg = 360 / holes_amount;
+
+for (let h = 0; h < holes_amount; h++) {
+  doc.setDrawColor("black");
+  doc.circle(clip_x, holes_padding, holes_radius);
+}
+
+const pdfData = `${doc.output("datauristring", {
+  filename: "ruleta-36p.pdf",
+})}#view=fit`;
+---
+
+<iframe src={pdfData} class="w-full"></iframe>
