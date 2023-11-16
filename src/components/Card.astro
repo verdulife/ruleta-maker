@@ -40,11 +40,14 @@ const holes_amount = 36;
 const holes_size = 3;
 const holes_radius = holes_size / 2;
 const holes_padding = 30;
-const hole_deg = 360 / holes_amount;
 
 for (let h = 0; h < holes_amount; h++) {
+  const angle = h * (360 / holes_amount) * (Math.PI / 180);
+  const hole_x = clip_x + (clip_radius - holes_padding) * Math.cos(angle);
+  const hole_y = clip_y + (clip_radius - holes_padding) * Math.sin(angle);
+
   doc.setDrawColor("black");
-  doc.circle(clip_x, holes_padding, holes_radius);
+  doc.circle(hole_x, hole_y, holes_radius);
 }
 
 const pdfData = `${doc.output("datauristring", {
